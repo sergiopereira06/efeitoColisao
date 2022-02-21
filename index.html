@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste</title>
+    <style>
+        canvas{
+            border: solid;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="600" height="600"></canvas>
+    <script>
+        var x = y = 10
+        var mX = mY = 0
+        var sz = 50
+        var vel = 2
+        var cnv = document.querySelector("canvas")
+        var ctx = cnv.getContext("2d")
+
+        window.addEventListener("keydown", function(e){
+            var tecla = e.keyCode
+            if(tecla == 37){
+                mX = -vel
+            }
+            if(tecla == 38){
+                mY = -vel
+            }
+            if(tecla == 39){
+                mX = vel
+            }
+            if(tecla == 40){
+                mY = vel
+            }
+        })
+        window.addEventListener("keyup", function(e){
+            var tecla = e.keyCode
+            if(tecla == 37){
+                mX = 0
+            }
+            if(tecla == 38){
+                mY = 0
+            }
+            if(tecla == 39){
+                mX = 0
+            }
+            if(tecla == 40){
+                mY = 0
+            }
+        })
+        class Perso{
+            constructor(x, y, sz, color){
+                this.x = x,
+                this.y = y,
+                this.sz = sz,
+                this.color = color
+            }
+            draw(){
+                ctx.beginPath()
+                ctx.fillStyle = this.color
+                ctx.fillRect( this.x, this.y, this.sz, this.sz)
+                ctx.closePath()
+            }
+        }
+        class CPU extends Perso{
+    
+        }
+        var player = new Perso(x, y, sz, 'blue')
+        var cpu = new CPU(400, 400, sz, 'yellow')
+        function loop(){
+            ctx.clearRect(0, 0, cnv.width, cnv.height)
+            cpu.draw()
+            player.draw()
+            update()
+            requestAnimationFrame(loop)
+        }
+        function update(){
+            player.x += mX
+            player.y += mY
+
+            if(player.x + player.sz > cpu.x && player.x < cpu.x + cpu.sz && player.y  + player.sz > cpu.y && player.y < cpu.y  + cpu.sz){
+                player.color = "red"
+            }else{
+                player.color = "blue"
+            }
+            player.x = Math.max(0 , Math.min(player.x , cnv.width - sz))
+            player.y = Math.max(0 , Math.min(player.y , cnv.height - sz)) 
+        }
+        loop()
+        
+    </script>
+</body>
+</html>
